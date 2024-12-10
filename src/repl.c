@@ -58,7 +58,8 @@ void eval_file(refera_state_t* state, const char* filename)
         if (!result) printf("error: %s\n", state->error_message);
 }
 
-void print_usage() {
+void print_usage()
+{
     printf("USAGE: refera [--help] [file_name]\n");
     printf("  --help          Display this help message\n");
     printf("  file_name       Evaluate the file\n");
