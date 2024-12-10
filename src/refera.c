@@ -39,7 +39,7 @@ static void set_error_message(refera_state_t* state, char* error_message)
 		return;
 	}
 
-	size_t error_len = strlen(error_message);
+	size_t error_len = strlen(error_message) + 1;
 	state->error_message = malloc(error_len * sizeof(char));
 
 	strcpy(state->error_message, error_message); // Copy
