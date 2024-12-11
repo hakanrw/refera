@@ -1,5 +1,19 @@
 2024-12-11  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
 
+    * Changed license from GPLv3 to LGPLv3.
+    * Moved some functions and files around for better organization.
+    * Added new prototype functions for global variables and function management:
+        - refera_set_variable()
+        - refera_get_variable()
+        - refera_register_function()
+        - refera_register_builtin_functions()
+        - refera_call_function()
+    * Updated `refera.h` with new function prototypes.
+    * Updated the `Makefile` to reflect changes in file organization.
+    * Minor modifications to `parser.c` and related files.
+
+2024-12-11  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
     * Initial project setup:
       - Created the base project structure with the following files:
         + `AUTHORS`: Added file to list the project authors.

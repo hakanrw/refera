@@ -2,16 +2,16 @@
  * This file is part of Refera, the interpreted scripting language.
  *
  * Refera is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Refera is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Refera is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with Refera.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2024  Ahmet Hakan Candar
@@ -24,7 +24,10 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef struct {
+/* Refera structures */
+
+typedef struct
+{
 	void** data;         // Array of pointers to store values
 	size_t size;         // Current number of elements in the stack
 	size_t capacity;     // Total allocated capacity of the stack
@@ -33,16 +36,38 @@ refera_stack_t;
 
 typedef struct
 {
-	void* global_variables;        // Array of global variables
-	void* function_registry;       // Array of functions
-	refera_stack_t stack;          // Interpreter stack
-	char* error_message;     // Error message if exists
+	void* variables;            // Array of global variables
+	void* function_registry;    // Array of functions
+	refera_stack_t stack;       // Interpreter stack
+	char* error_message;        // Error message if exists
 }
 refera_state_t;
+
+typedef bool (*refera_delegate_t)(refera_state_t* state);
+
+/* State initalization */
 
 void refera_state_init(refera_state_t* state);
 
 void refera_state_destroy(refera_state_t* state);
+
+/* Registering */
+
+void refera_register_function(refera_state_t* state, const char* fname,
+                              refera_delegate_t function);
+
+void refera_register_builtin_functions(refera_state_t* state);
+
+/* Expressions */
+
+void refera_set_variable(refera_state_t* state, const char* name,
+                         void* value);
+
+void* refera_get_variable(refera_state_t* state, const char* name);
+
+bool refera_call_function(refera_state_t* state, const char* name);
+
+/* Interpretarion */
 
 bool refera_eval_string(refera_state_t* state, const char* text);
 
