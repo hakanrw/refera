@@ -74,8 +74,8 @@ run: $(EXEC)
 
 # Install target
 install: all
-	cp $(SLIB) $(ALIB) $(EXEC) $(INSTALL_DIR) --parents
-	cp $(INCLUDE_DIR)/refera.h $(INSTALL_HEADER_DIR)
+	cp $(SLIB) $(ALIB) $(EXEC) $(INSTALL_DIR)/ --parents
+	cp $(INCLUDE_DIR)/refera.h $(INSTALL_HEADER_DIR)/
 
 # Uninstall target
 uninstall:
