@@ -1,0 +1,35 @@
+2024-12-12  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+    * Simplify project due to scope limitation.
+        - Remove refera_register_function()
+        - Remove refera_register_builtins_function()
+        - Remove refera_call_function()
+
+2024-12-11  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+    * Changed license from GPLv3 to LGPLv3.
+    * Moved some functions and files around for better organization.
+    * Added new prototype functions for global variables and function management:
+        - refera_set_variable()
+        - refera_get_variable()
+        - refera_register_function()
+        - refera_register_builtin_functions()
+        - refera_call_function()
+    * Updated `refera.h` with new function prototypes.
+    * Updated the `Makefile` to reflect changes in file organization.
+    * Minor modifications to `parser.c` and related files.
+
+2024-12-11  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+    * Initial project setup:
+      - Created the base project structure with the following files:
+        + `AUTHORS`: Added file to list the project authors.
+        + `LICENSE`: Added file to specify the project license.
+        + `README.md`: Added basic readme to describe the project.
+        + `Makefile`: Created Makefile for building the project.
+        + `include/refera.h`: Added header file for core functionality.
+        + `src/include/parser.h`: Created header file for the parser functionality.
+        + `src/parser.c`: Added parser source file.
+        + `src/refera.c`: Created source file for main project logic.
+        + `src/repl.c`: Added source file for REPL functionality.
+      - Organized project into directories: `include/` for headers and `src/` for source files.
