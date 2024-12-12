@@ -25,16 +25,33 @@
 #include "parser.h"
 
 struct ParseTable PT[1];
+void displayParseTable() {
+    printf("\nParse Table:\n");
+    printf("| Operation | Destination | Source1 | Source2 | If | Condition | Operand1 (Symbol, idx1, idx2) | Operand2 (Symbol, idx1, idx2) |\n");
+    printf("| %d         | %s            | %s        | %s        | %d  | %d         | %s, %d, %d                        | %s, %d, %d                        |\n",
+           PT[0].operation,
+           PT[0].destination,
+           PT[0].source1,
+           PT[0].source2,
+           PT[0].ifexists,
+           PT[0].cond,
+           PT[0].operand1.symbol,
+           PT[0].operand1.idx1,
+           PT[0].operand1.idx2,
+           PT[0].operand2.symbol,
+           PT[0].operand2.idx1,
+           PT[0].operand2.idx2
+    );
+}
 
 void parser_parse_statement(const char* statement){
     char *statement_ptr = statement;
     while (*statement_ptr != '\0') {
-        printf("%c\n", *statement_ptr);
         if (strncmp(statement,"if",2) == 0) {
             PT[0].ifexists = 1;
-            printf("if exists\n");
         }
         statement_ptr ++;
     }
+    displayParseTable();
 }
 
