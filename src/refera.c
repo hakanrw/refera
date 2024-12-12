@@ -58,7 +58,7 @@ void refera_state_destroy(refera_state_t* state)
 bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
-
+    parser_parse_statement(text);
 	set_error_message(state, "Unimplemented statement");
 
 	return false;

@@ -20,11 +20,21 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
+#include <string.h>
+#include <stdio.h>
 #include "parser.h"
 
 struct ParseTable PT[1];
 
-void parser_parse_statement(const char* statement)
-{
-
+void parser_parse_statement(const char* statement){
+    char *statement_ptr = statement;
+    while (*statement_ptr != '\0') {
+        printf("%c\n", *statement_ptr);
+        if (strncmp(statement,"if",2) == 0) {
+            PT[0].ifexists = 1;
+            printf("if exists\n");
+        }
+        statement_ptr ++;
+    }
 }
+
