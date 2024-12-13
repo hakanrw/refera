@@ -1,3 +1,18 @@
+2024-12-13  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+    * src/functions.h (refera_get_variable): Implement function.
+        (refera_set_variable): Implement function.
+        (refera_sum, refera_aver, refera_diag, refera_print): Add stub declarations.
+
+    * src/functions.c (refera_sum, refera_aver, refera_diag, refera_print): 
+        Add stub function definitions.
+
+    * src/operations.h: New file.
+        (refera_operation_t): Define operation type.
+        (R_ADD, R_SUB, R_MUL, R_DIV, R_INI, R_SET, R_CPY, R_EXC): Add operation type 
+        macros for builtin statements.
+        (R_SUM, R_AVG, R_DIA, R_PRI): Add operation type macros for builtin functions.
+
 2024-12-12  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
 
     * Simplify project due to scope limitation.

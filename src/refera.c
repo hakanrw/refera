@@ -55,6 +55,38 @@ void refera_state_destroy(refera_state_t* state)
 	set_error_message(state, NULL);
 }
 
+refera_symbol_t* refera_get_variable(refera_state_t* state,
+                                     const char* name)
+{
+	for (size_t i = 0; i < state->variables_idx; i++)
+	{
+		if (strcmp(name, state->variables[i].symbol) == 0)
+			return &state->variables[i];
+	}
+
+	return NULL; // Not found
+}
+
+void refera_set_variable(refera_state_t* state, const char* name,
+                         refera_symbol_t value)
+{
+	strncpy(value.symbol, name, 10); // Set symbol name
+	value.symbol[10 - 1] = 0; // Ensure termination
+
+	refera_symbol_t* existing_variable =
+                         refera_get_variable(state, name);
+
+	if (existing_variable == NULL)
+	{
+		state->variables[state->variables_idx] = value;
+		state->variables_idx++;
+	}
+	else
+	{
+		*existing_variable = value; // Overwrite
+	}
+}
+
 bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
@@ -68,7 +100,8 @@ bool refera_eval_file(refera_state_t* state, const char* filename)
 {
 	FILE *file = fopen(filename, "r");
 
-	if (file == NULL) {
+	if (file == NULL)
+	{
 		char error_message[256];
 		snprintf(error_message, 256, "Error opening file %s", filename);
 		set_error_message(state, error_message);

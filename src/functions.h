@@ -27,8 +27,10 @@
 
 #include "refera.h"
 
-void refera_print(refera_state_t* state, refera_symbol_t* symbol)
-{
-	int value = *symbol->base;
-	printf("%d\n", value);
-}
+refera_symbol_t refera_sum(refera_symbol_t symbol);
+
+refera_symbol_t refera_aver(refera_symbol_t symbol);
+
+refera_symbol_t refera_diag(refera_symbol_t symbol);
+
+void refera_print(refera_symbol_t symbol);

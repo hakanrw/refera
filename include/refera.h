@@ -57,7 +57,8 @@ void refera_state_destroy(refera_state_t* state);
 void refera_set_variable(refera_state_t* state, const char* name,
                          refera_symbol_t value);
 
-refera_symbol_t* refera_get_variable(refera_state_t* state, const char* name);
+refera_symbol_t* refera_get_variable(refera_state_t* state,
+                                     const char* name);
 
 /* Interpretarion */
 
