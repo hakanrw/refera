@@ -43,15 +43,131 @@ void displayParseTable() {
            PT[0].operand2.idx2
     );
 }
+#include <ctype.h>
+#include <limits.h>
 
-void parser_parse_statement(const char* statement){
-    char *statement_ptr = statement;
-    while (*statement_ptr != '\0') {
-        if (strncmp(statement,"if",2) == 0) {
-            PT[0].ifexists = 1;
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+void tokenize(const char *statement, char tokens[50][10], int *token_count) {
+    char temp[20];
+    int temp_index = 0, token_index = 0;
+    for (int i = 0; statement[i] != '\0'; i++)
+    {
+        char c = statement[i];
+        if ((c == '<' && statement[i+1] == '>')
+        || (c == '<' && statement[i+1] == '=' )
+        || (c == '>' && statement[i+1] == '=')
+        || (c == '=' && statement[i+1] == '='))
+        {
+            if (temp_index > 0) {
+                temp[temp_index] = '\0';
+                strcpy(tokens[token_index++], temp);
+                temp_index = 0;
+            }
+            temp[temp_index] = c;
+            temp[temp_index + 1] = statement[i+1];
+            temp[temp_index + 2] = '\0';
+            strcpy(tokens[token_index++], temp);
+            i++;
         }
-        statement_ptr ++;
+        else if (c == 'i' && statement[i+1] == 'f')
+        {
+            temp[temp_index] = c;
+            temp[temp_index + 1] = statement[i+1];
+            temp[temp_index + 2] = '\0';
+            strcpy(tokens[token_index++], temp);
+            i++;
+        }
+        else if (strchr("()/*+-[],<>=", c))
+        {
+            if (temp_index > 0) {
+                temp[temp_index] = '\0';
+                strcpy(tokens[token_index++], temp);
+                temp_index = 0;
+            }
+            temp[0] = c;
+            temp[1] = '\0';
+            strcpy(tokens[token_index++], temp);
+        }
+        else if (c == ' ')
+        {
+            if (temp_index > 0)
+            {
+                temp[temp_index] = '\0';
+                strcpy(tokens[token_index++], temp);
+                temp_index = 0;
+            }
+        }
+        else
+        {
+            temp[temp_index++] = c;
+            temp[temp_index + 1] = '\0';
+        }
     }
-    displayParseTable();
+    if (temp_index > 0)
+    {
+        temp[temp_index] = '\0';
+        strcpy(tokens[token_index++], temp);
+    }
+    *token_count = token_index;
 }
+int check_operations(const char* token) {
+    if (strcmp(token, "+") == 0) {
+        return 1;
+    }
+    else if (strcmp(token, "-") == 0) {
+        return 2;
+    }
+    else if (strcmp(token, "*") == 0) {
+        return 3;
+    }
+    else if (strcmp(token, "/") == 0) {
+        return 4;
+    }
+    else if (strcmp(token, "=") == 0) {
+        return 6;
+    }
+    else {
+        return 0;
+    }
+}
+int check_cond(const char* token) {
+    if (strcmp(token, "==") == 0)
+    {
+        return 1;
+    }
+    else if (strcmp(token, "!=") == 0)
+    {
+        return 2;
+    }
+    else if (strcmp(token, ">") == 0)
+    {
+        return 3;
+    }
+    else if (strcmp(token, ">=") == 0)
+    {
+        return 4;
+    }
+    else if (strcmp(token, "<") == 0)
+    {
+        return 5;
+    }
+    else if (strcmp(token, "<=") == 0)
+    {
+        return 6;
+    }
+    else
+    {
+        return 0;
+    }
+}
+void parser_parse_statement(const char* statement)
+{
+
+}
+
 
