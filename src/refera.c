@@ -29,6 +29,8 @@
 
 #include "refera.h"
 #include "parser.h"
+#include "functions.h"
+#include "operations.h"
 
 static void set_error_message(refera_state_t* state, char* error_message)
 {
@@ -146,31 +148,57 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 
 	switch (operation)
 	{
-		case 1:   //Addition
+		case R_ADD:
 			break;
-		case 2:   //Subtraction
+		case R_SUB:
 			break;
-		case 3:   //Multiplication
+		case R_MUL:
 			break;
-		case 4:   //Division
+		case R_DIV:
 			break;
-		case 5:   //Initialize
+		case R_INI:
 			break;
-		case 6:   //Set
+		case R_SET:
 			break;
-		case 7:   //Copy
+		case R_CPY:
 			break;
-		case 8:   //Sum
+		case R_SUM:
+			refera_symbol_t* opr = refera_get_variable(state, PT[0].operand1.symbol);
+			if(opr == NULL || PT[0].destination == NULL)
+			{
+				set_error_message(state, "Can't find operand or destination");
+				return false;
+			}
+			refera_set_variable(state, PT[0].destination, refera_sum(*opr));
 			break;
-		case 9:   //Average
+		case R_AVG:
+			refera_symbol_t* opr = refera_get_variable(state, PT[0].operand1.symbol);
+			if(opr == NULL || PT[0].destination == NULL)
+			{
+				set_error_message(state, "Can't find operand or destination");
+				return false;
+			}
+			refera_set_variable(state, PT[0].destination, refera_aver(*opr));
 			break;
-		case 10:   //Diagonal
+		case R_DIA:
+			refera_symbol_t* opr = refera_get_variable(state, PT[0].operand1.symbol);
+			if(opr == NULL || PT[0].destination == NULL)
+			{
+				set_error_message(state, "Can't find operand or destination");
+				return false;
+			}
+			refera_set_variable(state, PT[0].destination, refera_diag(*opr));
 			break;
-		case 11:   //Exchange
+		case R_EXC:
 			break;
-		case 12:   //Print
+		case R_PRI:
 			refera_symbol_t* var = refera_get_variable(state, PT[0].operand1.symbol);
-			refera_print(*var); // Not working, can't include functions.h
+			if(var == NULL)
+			{
+				set_error_message(state, "Can't find operand");
+				return false;
+			}
+			refera_print(*var);
 			return true;
 			break;
 	}
