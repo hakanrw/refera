@@ -20,6 +20,9 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
+#ifndef OPERATIONS_H
+#define OPERATIONS_H
+
 typedef unsigned char refera_operation_t; // Operation type 0..255
 
 /* Builtin statements */
@@ -52,3 +55,4 @@ typedef unsigned char refera_operation_t; // Operation type 0..255
 /* print */
 #define R_PRI	12
 
+#endif /* OPERATIONS_H */

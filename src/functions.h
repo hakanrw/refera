@@ -20,6 +20,9 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
 #include <string.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -34,3 +37,5 @@ refera_symbol_t refera_aver(refera_symbol_t symbol);
 refera_symbol_t refera_diag(refera_symbol_t symbol);
 
 void refera_print(refera_symbol_t symbol);
+
+#endif /* FUNCTIONS_H */
