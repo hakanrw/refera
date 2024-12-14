@@ -138,8 +138,42 @@ refera_symbol_t refera_create_variable(int dim, int size1, int size2)
 bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
+
+	int operation = 12;
+	//int operation = PT[0].operation;
 	parser_parse_statement(text);
 	parser_display_table();
+
+	switch (operation)
+	{
+		case 1:   //Addition
+			break;
+		case 2:   //Subtraction
+			break;
+		case 3:   //Multiplication
+			break;
+		case 4:   //Division
+			break;
+		case 5:   //Initialize
+			break;
+		case 6:   //Set
+			break;
+		case 7:   //Copy
+			break;
+		case 8:   //Sum
+			break;
+		case 9:   //Average
+			break;
+		case 10:   //Diagonal
+			break;
+		case 11:   //Exchange
+			break;
+		case 12:   //Print
+			refera_symbol_t* var = refera_get_variable(state, PT[0].operand1.symbol);
+			refera_print(*var); // Not working, can't include functions.h
+			return true;
+			break;
+	}
 
 	set_error_message(state, "Unimplemented statement");
 
