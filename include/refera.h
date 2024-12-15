@@ -69,6 +69,8 @@ refera_symbol_t refera_create_variable(int dim, int size1, int size2);
 
 /* Interpretarion */
 
+bool check_if(refera_state_t* state);
+
 bool refera_eval_string(refera_state_t* state, const char* text);
 
 bool refera_eval_file(refera_state_t* state, const char* filename);

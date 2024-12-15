@@ -137,6 +137,72 @@ refera_symbol_t refera_create_variable(int dim, int size1, int size2)
 	return variable;
 }
 
+bool check_if(refera_state_t* state)
+{
+	if(PT[0].ifexists == 0) return true;
+	int idx1_1, idx1_2, idx2_1, idx2_2;
+	idx1_1 = idx1_2 = idx2_1 = idx2_2 = -1;
+	refera_symbol_t* opr1 = refera_get_variable(state, PT[0].operand1.symbol);
+	refera_symbol_t* opr2 = refera_get_variable(state, PT[0].operand2.symbol);
+	int opr1_value = -1;
+	int opr2_value = -1;
+	if(opr1->dim != 0)
+	{
+		if(opr1->dim == 1)
+		{
+			idx1_1 = PT[0].operand1.idx1;
+			opr1_value = *(opr1->base + idx1_1);
+		}
+		else
+		{
+			idx1_1 = PT[0].operand1.idx1;
+			idx1_2 = PT[0].operand1.idx2;
+			int array_index = (idx1_1 * opr1->size2) + idx1_2;
+			opr1_value = *(opr1->base + array_index);
+		}
+	}
+	else opr1_value = *(opr1->base);
+	if(opr2->dim != 0)
+	{
+		if(opr2->dim == 1)
+		{
+			idx2_1 = PT[0].operand2.idx1;
+			opr2_value = *(opr2->base + idx2_1);
+		}
+		else
+		{
+			idx2_1 = PT[0].operand2.idx1;
+			idx2_2 = PT[0].operand2.idx2;
+			int array_index = (idx2_1 * opr2->size2) + idx2_2;
+			opr2_value = *(opr2->base + array_index);
+		}
+	}
+	else opr2_value = *(opr2->base);
+	int condition = PT[0].cond;
+	switch (condition)
+	{
+		case R_EQU:
+			if(opr1_value == opr2_value) return true;
+			break;
+		case R_NEQ:
+			if(opr1_value != opr2_value) return true;
+			break;
+		case R_GRT:
+			if(opr1_value > opr2_value) return true;
+			break;
+		case R_GTE:
+			if(opr1_value >= opr2_value) return true;
+			break;
+		case R_LSR:
+			if(opr1_value < opr2_value) return true;
+			break;
+		case R_LRE:
+			if(opr1_value <= opr2_value) return true;
+			break;
+	}
+	return false;
+}
+
 bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
@@ -145,6 +211,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 	//int operation = PT[0].operation;
 	parser_parse_statement(text);
 	parser_display_table();
+
+	refera_symbol_t* opr = NULL;
 
 	switch (operation)
 	{
@@ -163,7 +231,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 		case R_CPY:
 			break;
 		case R_SUM:
-			refera_symbol_t* opr = refera_get_variable(state, PT[0].operand1.symbol);
+			if(!check_if(state)) break;
+			opr = refera_get_variable(state, PT[0].operand1.symbol);
 			if(opr == NULL || PT[0].destination == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
@@ -172,7 +241,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			refera_set_variable(state, PT[0].destination, refera_sum(*opr));
 			break;
 		case R_AVG:
-			refera_symbol_t* opr = refera_get_variable(state, PT[0].operand1.symbol);
+			if(!check_if(state)) break;
+			opr = refera_get_variable(state, PT[0].operand1.symbol);
 			if(opr == NULL || PT[0].destination == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
@@ -181,7 +251,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			refera_set_variable(state, PT[0].destination, refera_aver(*opr));
 			break;
 		case R_DIA:
-			refera_symbol_t* opr = refera_get_variable(state, PT[0].operand1.symbol);
+			if(!check_if(state)) break;
+			opr = refera_get_variable(state, PT[0].operand1.symbol);
 			if(opr == NULL || PT[0].destination == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
@@ -192,6 +263,7 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 		case R_EXC:
 			break;
 		case R_PRI:
+			if(!check_if(state)) break;
 			refera_symbol_t* var = refera_get_variable(state, PT[0].operand1.symbol);
 			if(var == NULL)
 			{
