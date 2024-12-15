@@ -54,6 +54,7 @@ void displayParseTable() {
 void Parse_Table_reset(){
     PT[0].operation = 0;
     PT[0].ifexists = 0;
+    PT[0].destination[0]= '\0';
     PT[0].cond = 0;
     PT[0].operand1.symbol[0] = '\0';
     PT[0].operand1.idx1 = 0;
