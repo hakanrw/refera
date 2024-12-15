@@ -51,7 +51,8 @@ void displayParseTable() {
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdlib.h>
-void Parse_Table_reset(){
+void Parse_Table_reset()
+{
     PT[0].operation = 0;
     PT[0].ifexists = 0;
     PT[0].destination[0]= '\0';
