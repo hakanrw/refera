@@ -51,7 +51,17 @@ void displayParseTable() {
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
+void Parse_Table_reset(){
+    PT[0].operation = 0;
+    PT[0].ifexists = 0;
+    PT[0].cond = 0;
+    PT[0].operand1.symbol[0] = '\0';
+    PT[0].operand1.idx1 = 0;
+    PT[0].operand1.idx2 = 0;
+    PT[0].operand2.symbol[0] = '\0';
+    PT[0].operand2.idx1 = 0;
+    PT[0].operand2.idx2 = 0;
+}
 void tokenize(const char *statement, char tokens[50][10], int *token_count) {
     char temp[20];
     int temp_index = 0, token_index = 0;
@@ -128,9 +138,10 @@ int check_operations(const char* token) {
     else if (strcmp(token, "/") == 0) {
         return 4;
     }
-    else if (strcmp(token, "=") == 0) {
-        return 6;
+    else if (strcmp(token, "<>") == 0) {
+        return 11;
     }
+
     else {
         return 0;
     }
@@ -167,7 +178,109 @@ int check_cond(const char* token) {
 }
 void parser_parse_statement(const char* statement)
 {
+    char tokens[50][10];
+    int token_count;
+    tokenize(statement, tokens, &token_count);
 
+    for (int i = 0; i < token_count; i++)
+    {
+        printf("%s ", tokens[i]);
+    }
+
+    int ifexists = 0;
+    int i = 0;
+
+    while(i < token_count)
+    {
+        if (strcmp(tokens[i], "if") == 0)
+        {
+            PT[0].ifexists = 1;
+            ifexists = 1;
+            i++;
+        }
+        else if (strcmp(tokens[i], "(") == 0)
+        {
+            i++;
+            while(strcmp(tokens[i], ")") != 0)
+            {
+                if (strcmp(tokens[i+1], "[") == 0)
+                {
+                    if (PT[0].operand1.symbol[0] != '\0')
+                    {
+                        strcpy(PT[0].operand2.symbol, tokens[i]);
+                        PT[0].operand2.idx1 = atoi(tokens[i+2]);
+                        PT[0].operand2.idx2 = atoi(tokens[i+4]);
+                        i += 6;
+                    }
+                    else
+                    {
+                        strcpy(PT[0].operand1.symbol, tokens[i]);
+                        PT[0].operand1.idx1 = atoi(tokens[i+2]);
+                        PT[0].operand1.idx2 = atoi(tokens[i+4]);
+                        i += 6;
+                    }
+                }
+                else if (check_cond(tokens[i]) > 0)
+                {
+                    PT[0].cond = check_cond(tokens[i]);
+                    i++;
+                }
+                else
+                {
+                    if (PT[0].operand1.symbol[0] != '\0')
+                    {
+                        strcpy(PT[0].operand2.symbol, tokens[i]);
+                        i++;
+                    }
+                    else
+                    {
+                        strcpy(PT[0].operand1.symbol, tokens[i]);
+                        i ++;
+                    }
+                }
+            }
+            i++;
+        }
+        else if (strcmp(tokens[i], "[") == 0)
+        {
+            if(PT[0].operand1.symbol[0] != '\0')
+            {
+                strcpy(PT[0].operand2.symbol, tokens[i-1]);
+                PT[0].operand2.idx1 = atoi(tokens[i+1]);
+                PT[0].operand2.idx2 = atoi(tokens[i+3]);
+                i += 4;
+
+            }
+            else
+            {
+                strcpy(PT[0].operand1.symbol, tokens[i-1]);
+                PT[0].operand1.idx1 = atoi(tokens[i+1]);
+                PT[0].operand1.idx2 = atoi(tokens[i+3]);
+                i += 4;
+            }
+        }
+        else if (check_operations(tokens[i]) > 0)
+        {
+            PT[0].operation = check_operations(tokens[i]);
+            i++;
+        }
+        else if (strcmp(tokens[i], "=") == 0)
+        {
+            strcpy(PT[0].destination, tokens[i - 1]);
+            i++;
+        }
+        else
+        {
+            i++;
+        }
+    }
+
+    if (!ifexists)
+    {
+        PT[0].ifexists = 0;
+    }
+    displayParseTable();
+    Parse_Table_reset();
 }
 
 

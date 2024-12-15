@@ -38,8 +38,8 @@ struct ParseTable {
 };
 
 extern struct ParseTable PT[1];
-
-void parser_parse_statement(const char* statement);
+void reset_parse_table();
 void tokenize(const char *statement, char tokens[50][10], int *token_count);
 int check_operations(const char* token);
 int check_cond(const char* token);
+void parser_parse_statement(const char* statement);
