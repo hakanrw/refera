@@ -56,6 +56,8 @@ void Parse_Table_reset()
     PT[0].operation = 0;
     PT[0].ifexists = 0;
     PT[0].destination[0]= '\0';
+    PT[0].source1[0] = '\0';
+    PT[0].source2[0] = '\0';
     PT[0].cond = 0;
     PT[0].operand1.symbol[0] = '\0';
     PT[0].operand1.idx1 = 0;
@@ -270,11 +272,53 @@ void parser_parse_statement(const char* statement)
         {
             strcpy(PT[0].destination, tokens[i - 1]);
             i++;
+            if (isnumber(tokens[i][0]))
+            {
+                strcpy(PT[0].source1, tokens[i]);
+                PT[0].operation = 6;
+                i++;
+            }
+            else if (isupper(tokens[i][0])) {
+                strcpy(PT[0].source1, tokens[i]);
+                PT[0].operation = 7;
+                i++;
+                if (check_operations(tokens[i]) > 0 ) {
+                    PT[0].operation = check_operations(tokens[i]);
+                    i++;
+                    strcpy(PT[0].source2, tokens[i]);
+                }
+            }
+            else if (strcmp(tokens[i] ,"sum") == 0)
+            {
+                PT[0].operation = 8;
+                i+=2;
+                strcpy(PT[0].source1, tokens[i]);
+                i++;
+            }
+            else if (strcmp(tokens[i] ,"aver") == 0)
+            {
+                PT[0].operation = 9;
+                i+=2;
+                strcpy(PT[0].source1, tokens[i]);
+                i++;
+            }
+            else if (strcmp(tokens[i] ,"diag") == 0)
+            {
+                PT[0].operation = 9;
+                i+=2;
+                strcpy(PT[0].source1, tokens[i]);
+                i++;
+            }
+
         }
+
         else
         {
             i++;
         }
+
+
+
     }
 
     if (!ifexists)
