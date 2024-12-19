@@ -20,19 +20,22 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-#ifndef TEST_FUNCTIONS_H
-#define TEST_FUNCTIONS_H
+#include "test_parser.h"
+#include "../src/parser.h"
 
-#include "test.h"
+void test_parser_parse_statement()
+{
+	CU_ASSERT(false);
+}
 
-void test_functions_sum();
+int test_parser_register(CU_pSuite* suite)
+{
+	*suite = CU_add_suite("Parser", 0, 0);
+	if (*suite == NULL)
+		return CU_get_error();
 
-void test_functions_diag();
+	if (CU_add_test(*suite, "parse_statement()", test_parser_parse_statement) == NULL)
+		return CU_get_error();
 
-void test_functions_aver();
-
-void test_functions_print();
-
-int test_functions_register(CU_pSuite*);
-
-#endif /* TEST_FUNCTIONS_H */
+	return 0;
+}

@@ -20,19 +20,19 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-#ifndef TEST_FUNCTIONS_H
-#define TEST_FUNCTIONS_H
+#ifndef TEST_REFERA_H
+#define TEST_REFERA_H
 
 #include "test.h"
 
-void test_functions_sum();
+void test_refera_set_variable();
 
-void test_functions_diag();
+void test_refera_get_variable();
 
-void test_functions_aver();
+void test_refera_eval_string();
 
-void test_functions_print();
+void test_refera_eval_file();
 
-int test_functions_register(CU_pSuite*);
+int test_refera_register(CU_pSuite*);
 
-#endif /* TEST_FUNCTIONS_H */
+#endif /* TEST_REFERA_H */

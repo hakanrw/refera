@@ -20,19 +20,13 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-#ifndef TEST_FUNCTIONS_H
-#define TEST_FUNCTIONS_H
+#ifndef TEST_PARSER_H
+#define TEST_PARSER_H
 
 #include "test.h"
 
-void test_functions_sum();
+void test_parser_parse_statement();
 
-void test_functions_diag();
+int test_parser_register(CU_pSuite*);
 
-void test_functions_aver();
-
-void test_functions_print();
-
-int test_functions_register(CU_pSuite*);
-
-#endif /* TEST_FUNCTIONS_H */
+#endif /* TEST_PARSER_H */

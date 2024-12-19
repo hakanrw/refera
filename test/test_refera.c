@@ -20,19 +20,46 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-#ifndef TEST_FUNCTIONS_H
-#define TEST_FUNCTIONS_H
+#include "test_refera.h"
+#include "refera.h"
 
-#include "test.h"
+void test_refera_set_variable()
+{
+	CU_ASSERT(false);
+}
 
-void test_functions_sum();
+void test_refera_get_variable()
+{
+	CU_ASSERT(false);
+}
 
-void test_functions_diag();
+void test_refera_eval_string()
+{
+	CU_ASSERT(false);
+}
 
-void test_functions_aver();
+void test_refera_eval_file()
+{
+	CU_ASSERT(false);
+}
 
-void test_functions_print();
+int test_refera_register(CU_pSuite* suite)
+{
+	*suite = CU_add_suite("Interpreter", 0, 0);
+	if (*suite == NULL)
+		return CU_get_error();
 
-int test_functions_register(CU_pSuite*);
+	if (CU_add_test(*suite, "refera_set_variable()", test_refera_set_variable) == NULL)
+		return CU_get_error();
 
-#endif /* TEST_FUNCTIONS_H */
+	if (CU_add_test(*suite, "refera_get_variable()", test_refera_get_variable) == NULL)
+		return CU_get_error();
+
+	if (CU_add_test(*suite, "refera_eval_file()", test_refera_eval_file) == NULL)
+		return CU_get_error();
+
+	if (CU_add_test(*suite, "refera_eval_string()", test_refera_eval_string) == NULL)
+		return CU_get_error();
+
+	return 0;
+}
