@@ -1,7 +1,7 @@
 TARGET_NAME := refera
 
 # Compiler and flags
-CFLAGS ?= -Wall -Wextra
+CFLAGS ?= -Wall -Wextra -std=c99 -pedantic
 
 # Directories
 SRC_DIR := src
