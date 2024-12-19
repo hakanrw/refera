@@ -279,16 +279,6 @@ void parser_parse_statement(const char* statement)
                 PT[0].operation = 6;
                 i++;
             }
-            else if (tokens[i][0]) {
-                strcpy(PT[0].source1, tokens[i]);
-                PT[0].operation = 7;
-                i++;
-                if (check_operations(tokens[i]) > 0 ) {
-                    PT[0].operation = check_operations(tokens[i]);
-                    i++;
-                    strcpy(PT[0].source2, tokens[i]);
-                }
-            }
             else if (strcmp(tokens[i] ,"sum") == 0)
             {
                 PT[0].operation = 8;
@@ -305,11 +295,22 @@ void parser_parse_statement(const char* statement)
             }
             else if (strcmp(tokens[i] ,"diag") == 0)
             {
-                PT[0].operation = 9;
+                PT[0].operation = 10;
                 i+=2;
                 strcpy(PT[0].source1, tokens[i]);
                 i++;
             }
+            else if (tokens[i][0]) {
+                strcpy(PT[0].source1, tokens[i]);
+                PT[0].operation = 7;
+                i++;
+                if (check_operations(tokens[i]) > 0 ) {
+                    PT[0].operation = check_operations(tokens[i]);
+                    i++;
+                    strcpy(PT[0].source2, tokens[i]);
+                }
+            }
+
 
         }
 
