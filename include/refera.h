@@ -64,3 +64,7 @@ refera_symbol_t* refera_get_variable(refera_state_t* state, const char* name);
 bool refera_eval_string(refera_state_t* state, const char* text);
 
 bool refera_eval_file(refera_state_t* state, const char* filename);
+
+/* Helper Functions */
+
+bool refera_is_number(const char* str);

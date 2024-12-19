@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "parser.h"
 
 struct ParseTable PT[1];
@@ -272,13 +273,13 @@ void parser_parse_statement(const char* statement)
         {
             strcpy(PT[0].destination, tokens[i - 1]);
             i++;
-            if (isnumber(tokens[i][0]))
+            if (isdigit(tokens[i][0]))
             {
                 strcpy(PT[0].source1, tokens[i]);
                 PT[0].operation = 6;
                 i++;
             }
-            else if (isupper(tokens[i][0])) {
+            else if (tokens[i][0]) {
                 strcpy(PT[0].source1, tokens[i]);
                 PT[0].operation = 7;
                 i++;

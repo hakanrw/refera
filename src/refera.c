@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "refera.h"
 #include "parser.h"
@@ -58,7 +59,7 @@ void refera_state_destroy(refera_state_t* state)
 bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
-    parser_parse_statement(text);
+	parser_parse_statement(text);
 	set_error_message(state, "Unimplemented statement");
 
 	return false;
@@ -97,5 +98,17 @@ bool refera_eval_file(refera_state_t* state, const char* filename)
 	}
 
 	state->error_message = NULL;
+	return true;
+}
+
+bool refera_is_number(const char* str)
+{
+	size_t string_len = strlen(str);
+	for (size_t i = 0; i < string_len; i++)
+	{
+		bool digit = isdigit(str[i]);
+		if (!digit) return false;
+	}
+
 	return true;
 }
