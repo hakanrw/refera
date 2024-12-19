@@ -83,7 +83,7 @@ $(TEST): $(TEST_OBJS) $(ALIB)
 
 # Clean target
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR) $(LIB_DIR)
 
 # Run target
 run: $(EXEC)

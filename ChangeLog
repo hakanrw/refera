@@ -1,3 +1,22 @@
+2024-12-20  Barış Getiren  <baris.getiren@std.yeditepe.edu.tr>
+
+	Implement unit tests for refera.c
+	* test/test_refera.c (refera_test_copy_variable): Implement function.
+	(refera_test_create_variable): Likewise.
+	(refera_test_set_variable): Likewise.
+	(refera_test_get_variable): Likewise.
+	(refera_test_state_init): Likewise.
+	(refera_test_state_destroy): Likewise.
+	(refera_test_eval_string): Likewise.
+	(refera_test_eval_file): Add stub function.
+
+2024-12-20  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+	* Makefile: Add $(LIB_DIR) to clean.
+	* src/refera.c (refera_copy_variable): Implement function.
+	(refera_create_variable): Likewise.
+	(refera_set_variable): Ensure memory is freed.
+
 2024-12-19  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
 
 	Initial test suite integration

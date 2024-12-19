@@ -63,6 +63,10 @@ void refera_set_variable(refera_state_t* state, const char* name,
 refera_symbol_t* refera_get_variable(refera_state_t* state,
                                      const char* name);
 
+refera_symbol_t refera_copy_variable(refera_symbol_t* variable);
+
+refera_symbol_t refera_create_variable(int dim, int size1, int size2);
+
 /* Interpretarion */
 
 bool refera_eval_string(refera_state_t* state, const char* text);
