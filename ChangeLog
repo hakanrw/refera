@@ -1,3 +1,11 @@
+2024-12-14  Egemen Aybir  <egemen.aybir@std.yeditepe.edu.tr>
+
+    * src/operations.h: Added support for string evaluation operations.
+
+    * src/refera.c:
+        (refera_check_if): Implemented the `refera_check_if` function.
+        (refera_eval_string): Initial implementation of the `refera_eval_string` function.
+
 2024-12-13  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
 
     * src/functions.h (refera_get_variable): Implement function.
