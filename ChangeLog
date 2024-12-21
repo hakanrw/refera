@@ -1,3 +1,18 @@
+2024-12-21  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+	Port for Sony Playstation 2
+	* Makefile: Modify for PS2SDK.
+	* src/repl/repl.c (main): Call ps2_modules_load().
+	* src/repl/ps2.c: New file. Implement PS2-specific behaviour.
+	* src/repl/ps2.h: New file.
+	* ps2drv/ps2_drivers.h: Likewise.
+	* ps2drv/iomanx.irx: Likewise.
+	* ps2drv/filexio.irx: Likewise.
+	* ps2drv/mcserv.irx: Likewise.
+	* ps2drv/mcman.irx: Likewise.
+	* ps2drv/ps2kbd.irx: Likewise.
+	* ps2drv/usbd.irx: Likewise.
+
 2024-12-20  Barış Getiren  <baris.getiren@std.yeditepe.edu.tr>
 
 	Implement unit tests for refera.c
