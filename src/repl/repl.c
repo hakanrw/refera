@@ -23,7 +23,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "ps2.h"
 #include "refera.h"
+
+#define printf	ps2_printf
+#define fgets	ps2_fgets
 
 void repl_loop(refera_state_t* state)
 {
@@ -67,6 +71,10 @@ void print_usage()
 
 int main(int argc, char** argv)
 {
+	ps2_load_modules();
+	ps2_register_keyboard();
+	init_scr();
+
 	refera_state_t state;
 	refera_state_init(&state);
 
