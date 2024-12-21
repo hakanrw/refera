@@ -72,7 +72,6 @@ void print_usage()
 int main(int argc, char** argv)
 {
 	ps2_load_modules();
-	ps2_register_keyboard();
 	init_scr();
 
 	refera_state_t state;
