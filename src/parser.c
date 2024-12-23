@@ -179,16 +179,18 @@ int check_cond(const char* token) {
         return 0;
     }
 }
+
 void parser_parse_statement(const char* statement)
 {
+    parser_reset_table();
     char tokens[50][10];
     int token_count;
     tokenize(statement, tokens, &token_count);
 
-    for (int i = 0; i < token_count; i++)
-    {
-        printf("%s ", tokens[i]);
-    }
+//    for (int i = 0; i < token_count; i++)
+//    {
+//        printf("%s ", tokens[i]);
+//    }
 
     int ifexists = 0;
     int i = 0;
@@ -379,9 +381,6 @@ void parser_parse_statement(const char* statement)
     {
         PT[0].ifexists = 0;
     }
-
-    parser_display_table();
-    parser_reset_table();
 }
 
 

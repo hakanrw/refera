@@ -139,6 +139,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
 	parser_parse_statement(text);
+	parser_display_table();
+
 	set_error_message(state, "Unimplemented statement");
 
 	return false;
