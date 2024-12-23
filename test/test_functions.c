@@ -20,33 +20,46 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-struct Ary {
-	char symbol[10];
-	int idx1; // index 1
-	int idx2; // index 2
-};
+#include "test_functions.h"
+#include "../src/functions.h"
 
-struct ParseTable {
-	int operation; // operation code
-	char destination[10]; // destination array
-	char source1[10]; // source array 1
-	char source2[10]; // source array 2
-	int ifexists; // 1-exists, 0- does not exist
-	int cond; // condition code
-	struct Ary operand1;
-	struct Ary operand2;
-};
+void test_functions_sum()
+{
+	CU_ASSERT(false);
+}
 
-extern struct ParseTable PT[1];
+void test_functions_diag()
+{
+	CU_ASSERT(false);
+}
 
-void parser_reset_table();
+void test_functions_aver()
+{
+	CU_ASSERT(false);
+}
 
-void parser_display_table();
+void test_functions_print()
+{
+	CU_ASSERT(false);
+}
 
-void tokenize(const char *statement, char tokens[50][10], int *token_count);
+int test_functions_register(CU_pSuite* suite)
+{
+	*suite = CU_add_suite("Functions", 0, 0);
+	if (*suite == NULL)
+		return CU_get_error();
 
-int check_operations(const char* token);
+	if (CU_add_test(*suite, "sum()", test_functions_sum) == NULL)
+		return CU_get_error();
 
-int check_cond(const char* token);
+	if (CU_add_test(*suite, "diag()", test_functions_diag) == NULL)
+		return CU_get_error();
 
-void parser_parse_statement(const char* statement);
+	if (CU_add_test(*suite, "aver()", test_functions_aver) == NULL)
+		return CU_get_error();
+
+	if (CU_add_test(*suite, "print()", test_functions_print) == NULL)
+		return CU_get_error();
+
+	return 0;
+}

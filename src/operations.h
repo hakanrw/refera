@@ -20,33 +20,39 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-struct Ary {
-	char symbol[10];
-	int idx1; // index 1
-	int idx2; // index 2
-};
+#ifndef OPERATIONS_H
+#define OPERATIONS_H
 
-struct ParseTable {
-	int operation; // operation code
-	char destination[10]; // destination array
-	char source1[10]; // source array 1
-	char source2[10]; // source array 2
-	int ifexists; // 1-exists, 0- does not exist
-	int cond; // condition code
-	struct Ary operand1;
-	struct Ary operand2;
-};
+typedef unsigned char refera_operation_t; // Operation type 0..255
 
-extern struct ParseTable PT[1];
+/* Builtin statements */
 
-void parser_reset_table();
+/* Addition */
+#define R_ADD	1
+/* Subtraction */
+#define R_SUB	2
+/* Multiplication */
+#define R_MUL	3
+/* Division */
+#define R_DIV	4
+/* Array initialization */
+#define R_INI	5
+/* Assignment */
+#define R_SET	6
+/* Copy */
+#define R_CPY	7
+/* Exchange array elements */
+#define R_EXC	11
 
-void parser_display_table();
+/* Builtin functions */
 
-void tokenize(const char *statement, char tokens[50][10], int *token_count);
+/* sum() */
+#define R_SUM	8
+/* aver() */
+#define R_AVG	9
+/* diag() */
+#define R_DIA	10
+/* print */
+#define R_PRI	12
 
-int check_operations(const char* token);
-
-int check_cond(const char* token);
-
-void parser_parse_statement(const char* statement);
+#endif /* OPERATIONS_H */

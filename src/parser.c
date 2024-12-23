@@ -29,7 +29,8 @@
 #include <stdlib.h>
 
 struct ParseTable PT[1];
-void displayParseTable() {
+
+void parser_display_table() {
     printf("\nParse Table:\n");
     printf("| Operation | Destination | Source1 | Source2 | If | Condition | Operand1 (Symbol, idx1, idx2) | Operand2 (Symbol, idx1, idx2) |\n");
     printf("| %d         | %s            | %s        | %s        | %d  | %d         | %s, %d, %d                        | %s, %d, %d                        |\n",
@@ -48,7 +49,7 @@ void displayParseTable() {
     );
 }
 
-void Parse_Table_reset()
+void parser_reset_table()
 {
     PT[0].operation = 0;
     PT[0].ifexists = 0;
@@ -63,6 +64,7 @@ void Parse_Table_reset()
     PT[0].operand2.idx1 = 0;
     PT[0].operand2.idx2 = 0;
 }
+
 void tokenize(const char *statement, char tokens[50][10], int *token_count) {
     char temp[20];
     int temp_index = 0, token_index = 0;
@@ -377,8 +379,9 @@ void parser_parse_statement(const char* statement)
     {
         PT[0].ifexists = 0;
     }
-    displayParseTable();
-    Parse_Table_reset();
+
+    parser_display_table();
+    parser_reset_table();
 }
 
 

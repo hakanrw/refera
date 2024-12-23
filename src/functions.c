@@ -20,33 +20,37 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-struct Ary {
-	char symbol[10];
-	int idx1; // index 1
-	int idx2; // index 2
-};
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
 
-struct ParseTable {
-	int operation; // operation code
-	char destination[10]; // destination array
-	char source1[10]; // source array 1
-	char source2[10]; // source array 2
-	int ifexists; // 1-exists, 0- does not exist
-	int cond; // condition code
-	struct Ary operand1;
-	struct Ary operand2;
-};
+#include "refera.h"
 
-extern struct ParseTable PT[1];
+refera_symbol_t refera_sum(refera_symbol_t symbol)
+{
+	refera_symbol_t retval;
+	// TODO
+	return retval;
+}
 
-void parser_reset_table();
+refera_symbol_t refera_aver(refera_symbol_t symbol)
+{
+	refera_symbol_t retval;
+	// TODO
+	return retval;
+}
 
-void parser_display_table();
+refera_symbol_t refera_diag(refera_symbol_t symbol)
+{
+	refera_symbol_t retval;
+	// TODO
+	return retval;
+}
 
-void tokenize(const char *statement, char tokens[50][10], int *token_count);
-
-int check_operations(const char* token);
-
-int check_cond(const char* token);
-
-void parser_parse_statement(const char* statement);
+void refera_print(refera_symbol_t symbol)
+{
+	// TODO: Check if array, if so, print all elements
+	int value = *symbol.base;
+	printf("%d\n", value);
+}

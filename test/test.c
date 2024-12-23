@@ -20,33 +20,34 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-struct Ary {
-	char symbol[10];
-	int idx1; // index 1
-	int idx2; // index 2
-};
+#include "test.h"
+#include "test_functions.h"
+#include "test_parser.h"
+#include "test_refera.h"
 
-struct ParseTable {
-	int operation; // operation code
-	char destination[10]; // destination array
-	char source1[10]; // source array 1
-	char source2[10]; // source array 2
-	int ifexists; // 1-exists, 0- does not exist
-	int cond; // condition code
-	struct Ary operand1;
-	struct Ary operand2;
-};
+int main()
+{
+	if (CU_initialize_registry() != CUE_SUCCESS)
+		return CU_get_error();
 
-extern struct ParseTable PT[1];
+	CU_pSuite functions_suite;
+	CU_pSuite parser_suite;
+	CU_pSuite refera_suite;
 
-void parser_reset_table();
+	int functions_reg_result = test_functions_register(&functions_suite);
+	if (functions_reg_result)
+		return functions_reg_result; // returned non-zero return value
 
-void parser_display_table();
+	int parser_reg_result = test_parser_register(&parser_suite);
+	if (parser_reg_result)
+		return parser_reg_result; // returned non-zero return value
 
-void tokenize(const char *statement, char tokens[50][10], int *token_count);
+	int refera_reg_result = test_refera_register(&refera_suite);
+	if (refera_reg_result)
+		return refera_reg_result; // returned non-zero return value
 
-int check_operations(const char* token);
-
-int check_cond(const char* token);
-
-void parser_parse_statement(const char* statement);
+	CU_basic_set_mode(CU_BRM_VERBOSE);
+	CU_basic_run_tests();
+	CU_cleanup_registry();
+	return 0;
+}

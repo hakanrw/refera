@@ -20,15 +20,22 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
+#include "test_parser.h"
+#include "../src/parser.h"
 
-#include "refera.h"
-
-void refera_print(refera_state_t* state, refera_symbol_t* symbol)
+void test_parser_parse_statement()
 {
-	int value = *symbol->base;
-	printf("%d\n", value);
+	CU_ASSERT(false);
+}
+
+int test_parser_register(CU_pSuite* suite)
+{
+	*suite = CU_add_suite("Parser", 0, 0);
+	if (*suite == NULL)
+		return CU_get_error();
+
+	if (CU_add_test(*suite, "parse_statement()", test_parser_parse_statement) == NULL)
+		return CU_get_error();
+
+	return 0;
 }

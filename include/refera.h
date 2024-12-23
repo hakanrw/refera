@@ -20,6 +20,9 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
+#ifndef REFERA_H
+#define REFERA_H
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -57,7 +60,12 @@ void refera_state_destroy(refera_state_t* state);
 void refera_set_variable(refera_state_t* state, const char* name,
                          refera_symbol_t value);
 
-refera_symbol_t* refera_get_variable(refera_state_t* state, const char* name);
+refera_symbol_t* refera_get_variable(refera_state_t* state,
+                                     const char* name);
+
+refera_symbol_t refera_copy_variable(refera_symbol_t* variable);
+
+refera_symbol_t refera_create_variable(int dim, int size1, int size2);
 
 /* Interpretarion */
 
@@ -68,3 +76,5 @@ bool refera_eval_file(refera_state_t* state, const char* filename);
 /* Helper Functions */
 
 bool refera_is_number(const char* str);
+
+#endif /* REFERA_H */

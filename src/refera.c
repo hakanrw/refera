@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <assert.h>
 
 #include "refera.h"
 #include "parser.h"
@@ -46,6 +47,18 @@ static void set_error_message(refera_state_t* state, char* error_message)
 	strcpy(state->error_message, error_message); // Copy
 }
 
+static size_t get_variable_base_len(refera_symbol_t* symbol)
+{
+	if (symbol->dim == 0)
+		return 1;
+	else if (symbol->dim == 1)
+		return symbol->size1;
+	else if (symbol->dim == 2)
+		return symbol->size1 * symbol->size2;
+	else
+		assert(false); // this should never execute
+}
+
 void refera_state_init(refera_state_t* state)
 {
 	memset(state, 0, sizeof(refera_state_t));
@@ -54,6 +67,72 @@ void refera_state_init(refera_state_t* state)
 void refera_state_destroy(refera_state_t* state)
 {
 	set_error_message(state, NULL);
+
+	for (size_t i = 0; i < state->variables_idx; i++)
+	{
+		free(state->variables[i].base); // Free
+		state->variables[i].base = NULL; // No dangling pointers
+	}
+}
+
+refera_symbol_t* refera_get_variable(refera_state_t* state,
+                                     const char* name)
+{
+	for (size_t i = 0; i < state->variables_idx; i++)
+	{
+		if (strcmp(name, state->variables[i].symbol) == 0)
+			return &state->variables[i];
+	}
+
+	return NULL; // Not found
+}
+
+void refera_set_variable(refera_state_t* state, const char* name,
+                         refera_symbol_t value)
+{
+	strncpy(value.symbol, name, 10); // Set symbol name
+	value.symbol[10 - 1] = 0; // Ensure termination
+
+	refera_symbol_t* existing_variable =
+                         refera_get_variable(state, name);
+
+	if (existing_variable == NULL)
+	{
+		state->variables[state->variables_idx] = value;
+		state->variables_idx++;
+	}
+	else
+	{
+		free(existing_variable->base); // Free
+		*existing_variable = value; // Overwrite
+	}
+}
+
+refera_symbol_t refera_copy_variable(refera_symbol_t* value)
+{
+	refera_symbol_t copied_var = refera_create_variable(value->dim,
+                                                            value->size1,
+                                                            value->size2);
+
+	size_t base_len = get_variable_base_len(&copied_var);
+	memcpy(copied_var.base, value->base, base_len * sizeof(int)); // Copy integers
+
+	return copied_var;
+}
+
+refera_symbol_t refera_create_variable(int dim, int size1, int size2)
+{
+	refera_symbol_t variable;
+	memset(&variable.symbol, 0, 10); // Clear name
+	variable.dim = dim;
+	variable.size1 = size1;
+	variable.size2 = size2;
+
+	size_t base_len = get_variable_base_len(&variable);
+	variable.base = malloc(base_len * sizeof(int));
+	memset(variable.base, 0, base_len * sizeof(int)); // Set all to 0
+
+	return variable;
 }
 
 bool refera_eval_string(refera_state_t* state, const char* text)
@@ -69,7 +148,8 @@ bool refera_eval_file(refera_state_t* state, const char* filename)
 {
 	FILE *file = fopen(filename, "r");
 
-	if (file == NULL) {
+	if (file == NULL)
+	{
 		char error_message[256];
 		snprintf(error_message, 256, "Error opening file %s", filename);
 		set_error_message(state, error_message);

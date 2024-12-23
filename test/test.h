@@ -20,33 +20,10 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-struct Ary {
-	char symbol[10];
-	int idx1; // index 1
-	int idx2; // index 2
-};
+#ifndef TEST_H
+#define TEST_H
 
-struct ParseTable {
-	int operation; // operation code
-	char destination[10]; // destination array
-	char source1[10]; // source array 1
-	char source2[10]; // source array 2
-	int ifexists; // 1-exists, 0- does not exist
-	int cond; // condition code
-	struct Ary operand1;
-	struct Ary operand2;
-};
+#include <CUnit/Basic.h>
+#include <stdbool.h>
 
-extern struct ParseTable PT[1];
-
-void parser_reset_table();
-
-void parser_display_table();
-
-void tokenize(const char *statement, char tokens[50][10], int *token_count);
-
-int check_operations(const char* token);
-
-int check_cond(const char* token);
-
-void parser_parse_statement(const char* statement);
+#endif /* TEST_H */

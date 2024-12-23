@@ -20,33 +20,19 @@
  * Copyright (C) 2024  Egemen Aybir
  */
 
-struct Ary {
-	char symbol[10];
-	int idx1; // index 1
-	int idx2; // index 2
-};
+#ifndef TEST_FUNCTIONS_H
+#define TEST_FUNCTIONS_H
 
-struct ParseTable {
-	int operation; // operation code
-	char destination[10]; // destination array
-	char source1[10]; // source array 1
-	char source2[10]; // source array 2
-	int ifexists; // 1-exists, 0- does not exist
-	int cond; // condition code
-	struct Ary operand1;
-	struct Ary operand2;
-};
+#include "test.h"
 
-extern struct ParseTable PT[1];
+void test_functions_sum();
 
-void parser_reset_table();
+void test_functions_diag();
 
-void parser_display_table();
+void test_functions_aver();
 
-void tokenize(const char *statement, char tokens[50][10], int *token_count);
+void test_functions_print();
 
-int check_operations(const char* token);
+int test_functions_register(CU_pSuite*);
 
-int check_cond(const char* token);
-
-void parser_parse_statement(const char* statement);
+#endif /* TEST_FUNCTIONS_H */
