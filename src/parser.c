@@ -24,6 +24,9 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "parser.h"
+#include <limits.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 struct ParseTable PT[1];
 void displayParseTable() {
@@ -44,14 +47,7 @@ void displayParseTable() {
            PT[0].operand2.idx2
     );
 }
-#include <ctype.h>
-#include <limits.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
-#include <stdlib.h>
 void Parse_Table_reset()
 {
     PT[0].operation = 0;
@@ -208,7 +204,24 @@ void parser_parse_statement(const char* statement)
             i++;
             while(strcmp(tokens[i], ")") != 0)
             {
-                if (strcmp(tokens[i+1], "[") == 0)
+                printf("ifexist: %d\n",PT[0].ifexists);
+                if (strcmp(tokens[i - 2], "if") != 0 && PT[0].ifexists == 0) {
+                    printf("copying %s to destination\n", tokens[i-2]);
+                    strcpy(PT[0].destination, tokens[i-2]);
+                    printf("destination: %s\n", PT[0].destination);
+                    if (isdigit(tokens[i][0])) {
+                        printf("copying %s to source1\n", tokens[i]);
+                        strcpy(PT[0].source1, tokens[i]);
+                        printf("source1: %s\n", PT[0].source1);
+                    }
+                    i++;
+                    if (strcmp(tokens[i], ",") == 0) {
+                        i++;
+                        strcpy(PT[0].source2, tokens[i]);
+                        i++;
+                    }
+                }
+                else if (strcmp(tokens[i+1], "[") == 0)
                 {
                     if (PT[0].operand1.symbol[0] != '\0')
                     {
@@ -248,22 +261,34 @@ void parser_parse_statement(const char* statement)
         }
         else if (strcmp(tokens[i], "[") == 0)
         {
-            if(PT[0].operand1.symbol[0] != '\0')
+            if (PT[0].destination[0] == '\0')
             {
-                strcpy(PT[0].operand2.symbol, tokens[i-1]);
-                PT[0].operand2.idx1 = atoi(tokens[i+1]);
-                PT[0].operand2.idx2 = atoi(tokens[i+3]);
-                i += 4;
-
-            }
-            else
-            {
+                strcpy(PT[0].destination, tokens[i-1]);
                 strcpy(PT[0].operand1.symbol, tokens[i-1]);
                 PT[0].operand1.idx1 = atoi(tokens[i+1]);
-                PT[0].operand1.idx2 = atoi(tokens[i+3]);
-                i += 4;
+                if (strcmp(tokens[i+2], ",") == 0) {
+                    PT[0].operand1.idx2 = atoi(tokens[i+3]);
+                    i += 5;
+                } else {
+                    PT[0].operand1.idx2 = 0;
+                    i += 3;
+                }
+            }
+            else if (PT[0].source1[0] == '\0')
+            {
+                strcpy(PT[0].source1, tokens[i-1]);
+                strcpy(PT[0].operand2.symbol, tokens[i-1]);
+                PT[0].operand2.idx1 = atoi(tokens[i+1]);
+                if (strcmp(tokens[i+2], ",") == 0) {
+                    PT[0].operand2.idx2 = atoi(tokens[i+3]);
+                    i += 5;
+                } else {
+                    PT[0].operand2.idx2 = 0;
+                    i += 3;
+                }
             }
         }
+
         else if (check_operations(tokens[i]) > 0)
         {
             PT[0].operation = check_operations(tokens[i]);
@@ -271,8 +296,24 @@ void parser_parse_statement(const char* statement)
         }
         else if (strcmp(tokens[i], "=") == 0)
         {
-            strcpy(PT[0].destination, tokens[i - 1]);
-            i++;
+            if (strcmp(tokens[i+1],"[") == 0) {
+                if (PT[0].operation == 0) {
+                    PT[0].operation = 5;
+
+                }
+                else {
+                    break;
+                }
+                while (strcmp(tokens[i], "]") != 0)
+                {
+                    i++;
+                }
+                break;
+            }
+            else if ((strcmp(tokens[i+1],"[") != 0)) {
+                strcpy(PT[0].destination, tokens[i - 1]);
+                i++;
+            }
             if (isdigit(tokens[i][0]))
             {
                 strcpy(PT[0].source1, tokens[i]);
@@ -311,6 +352,15 @@ void parser_parse_statement(const char* statement)
                 }
             }
 
+
+        }
+        else if (strcmp(tokens[i],"print") == 0) {
+            PT[0].operation = 12;
+            i++;
+            if (!isdigit(tokens[i][0])) {
+                strcpy(PT[0].destination, tokens[i]);
+                i++;
+            }
 
         }
 
