@@ -1,4 +1,18 @@
-2024-12-24  Berk Tahir Kılıç <berktahir.kilic@std.yeditepe.edu.tr>
+2024-12-23  Barış Getiren  <baris.getiren@std.yeditepe.edu.tr>
+
+	Implement unit tests for parser.c
+	* test/test_parser.c (parser_test_sum): Implement function.
+	(parser_test_set): Likewise.
+	(parser_test_copy): Likewise.
+	(parser_test_aver): Likewise.
+	(parser_test_diag): Likewise.
+	(parser_test_if): Likewise.
+	(parser_test_add): Likewise.
+	(parser_test_sub): Likewise.
+	(parser_test_exchange): Likewise.
+	(parser_test_print): Likewise.
+
+2024-12-23  Berk Tahir Kılıç  <berktahir.kilic@std.yeditepe.edu.tr>
 
 	Implement the parser
 	* src/parser.c (parser_reset_table): Implement function.
