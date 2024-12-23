@@ -362,7 +362,7 @@ void parser_parse_statement(const char* statement)
             PT[0].operation = 12;
             i++;
             if (!isdigit(tokens[i][0])) {
-                strcpy(PT[0].destination, tokens[i]);
+                strcpy(PT[0].source1, tokens[i]);
                 i++;
             }
 
