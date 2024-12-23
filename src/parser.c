@@ -208,7 +208,7 @@ void parser_parse_statement(const char* statement)
             i++;
             while(strcmp(tokens[i], ")") != 0)
             {
-                printf("ifexist: %d\n",PT[0].ifexists);
+                //printf("ifexist: %d\n",PT[0].ifexists);
                 if (strcmp(tokens[i - 2], "if") != 0 && PT[0].ifexists == 0) {
                     printf("copying %s to destination\n", tokens[i-2]);
                     strcpy(PT[0].destination, tokens[i-2]);

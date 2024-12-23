@@ -25,8 +25,6 @@
 
 #include "test.h"
 
-void test_parser_parse_statement();
-
 int test_parser_register(CU_pSuite*);
 
 #endif /* TEST_PARSER_H */
