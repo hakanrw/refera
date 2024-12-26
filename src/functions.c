@@ -50,7 +50,33 @@ refera_symbol_t refera_diag(refera_symbol_t symbol)
 
 void refera_print(refera_symbol_t symbol)
 {
-	// TODO: Check if array, if so, print all elements
-	int value = *symbol.base;
-	printf("%d\n", value);
+	if(symbol.dim == 0)
+	{
+		int value = *symbol.base;
+		printf("%d\n", value);
+	}
+	else if(symbol.dim == 1)
+	{
+		for (int i = 0; i < symbol.size1; i++)
+		{
+			printf("%d ", *(symbol.base + i));
+		}
+		printf("\n");
+	}
+	else if(symbol.dim == 2)
+	{
+		int a = 0;
+		for (int i = 0; i < symbol.size1 * symbol.size2; i++)
+		{
+			a++;
+			printf("%d ", *(symbol.base + i));
+			if(a == symbol.size2)
+			{
+				a = 0;
+				if(i != (symbol.size1 * symbol.size2) - 1)
+					printf(", ");
+			}
+		}
+		printf("\n");
+	}
 }
