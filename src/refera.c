@@ -582,6 +582,15 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			break;
 		case R_PRI:
 			if(!refera_check_if(state)) return true;
+			if(strcmp(PT[0].source1, "vars") == 0)
+			{
+				for (size_t i = 0; i < state->variables_idx; i++)
+				{
+					printf("%s: ", state->variables[i].symbol);
+					refera_print(state->variables[i]);
+				}
+				return true;
+			}
 			refera_symbol_t* var = refera_get_variable(state, PT[0].source1);
 			if(var == NULL)
 			{
