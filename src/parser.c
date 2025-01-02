@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 struct ParseTable PT[1];
+int values[256];
 
 void parser_display_table() {
     printf("\nParse Table:\n");
@@ -182,15 +183,17 @@ int check_cond(const char* token) {
 
 void parser_parse_statement(const char* statement)
 {
+    memset(values, 0, sizeof(values));
     parser_reset_table();
     char tokens[50][10];
     int token_count;
     tokenize(statement, tokens, &token_count);
 
-//    for (int i = 0; i < token_count; i++)
-//    {
-//        printf("%s ", tokens[i]);
-//    }
+   for (int i = 0; i < token_count; i++)
+   {
+       printf("%s ", tokens[i]);
+   }
+   printf("\n");
 
     int ifexists = 0;
     int i = 0;
@@ -308,8 +311,11 @@ void parser_parse_statement(const char* statement)
                 else {
                     break;
                 }
+                int element_count = 0;
                 while (strcmp(tokens[i], "]") != 0)
                 {
+                    values[element_count] = atoi(tokens[i+2]);
+                    element_count++;
                     i++;
                 }
                 break;

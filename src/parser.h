@@ -38,6 +38,7 @@ struct ParseTable {
 };
 
 extern struct ParseTable PT[1];
+extern int values[256];
 
 void parser_reset_table();
 

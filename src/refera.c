@@ -213,6 +213,7 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 
 	parser_parse_statement(text);
 	parser_display_table();
+	
 	int operation = PT[0].operation;
 	refera_symbol_t* opr = NULL;
 	refera_symbol_t* ary1 = NULL;
@@ -380,7 +381,22 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			if(PT[0].source1[0] == '\0') dim = 0;
 			else if(PT[0].source2[0] == '\0') dim = 1;
 			else dim = 2;
-			refera_set_variable(state, PT[0].destination,refera_create_variable(dim, atoi(PT[0].source1), atoi(PT[0].source2)));
+			refera_symbol_t new_var = refera_create_variable(dim, atoi(PT[0].source1), atoi(PT[0].source2));
+			if(dim == 1)
+			{
+				for (int i = 0; i < new_var.size1; i++)
+				{
+					*(new_var.base + i) = values[i];
+				}
+			}
+			else if(dim == 1)
+			{
+				for (int i = 0; i < new_var.size1 * new_var.size2; i++)
+				{
+					*(new_var.base + i) = values[i];
+				}
+			}	
+			refera_set_variable(state, PT[0].destination, new_var);
 			return true;
 			break;
 		case R_SET:
