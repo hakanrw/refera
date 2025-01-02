@@ -228,6 +228,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
 			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
 			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
@@ -282,6 +287,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
 			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
 			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
@@ -336,6 +346,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
 			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
 			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
@@ -390,6 +405,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
 			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
 			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
