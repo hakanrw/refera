@@ -189,11 +189,11 @@ void parser_parse_statement(const char* statement)
     int token_count;
     tokenize(statement, tokens, &token_count);
 
-   for (int i = 0; i < token_count; i++)
-   {
-       printf("%s ", tokens[i]);
-   }
-   printf("\n");
+//    for (int i = 0; i < token_count; i++)
+//    {
+//        printf("%s ", tokens[i]);
+//    }
+//    printf("\n");
 
     int ifexists = 0;
     int i = 0;
@@ -213,13 +213,13 @@ void parser_parse_statement(const char* statement)
             {
                 //printf("ifexist: %d\n",PT[0].ifexists);
                 if (strcmp(tokens[i - 2], "if") != 0 && PT[0].ifexists == 0) {
-                    printf("copying %s to destination\n", tokens[i-2]);
+                    // printf("copying %s to destination\n", tokens[i-2]);
                     strcpy(PT[0].destination, tokens[i-2]);
-                    printf("destination: %s\n", PT[0].destination);
+                    // printf("destination: %s\n", PT[0].destination);
                     if (isdigit(tokens[i][0])) {
-                        printf("copying %s to source1\n", tokens[i]);
+                        // printf("copying %s to source1\n", tokens[i]);
                         strcpy(PT[0].source1, tokens[i]);
-                        printf("source1: %s\n", PT[0].source1);
+                        // printf("source1: %s\n", PT[0].source1);
                     }
                     i++;
                     if (strcmp(tokens[i], ",") == 0) {
@@ -306,7 +306,6 @@ void parser_parse_statement(const char* statement)
             bool is2d = false;
             if (strcmp(tokens[i+1],"[") == 0) {
                 if (strcmp(tokens[i+2],"[") == 0) {
-                    printf("2d array\n");
                     is2d = true;
                 }
                 if (PT[0].operation == 0) {
@@ -334,7 +333,7 @@ void parser_parse_statement(const char* statement)
                             while (strcmp(tokens[i], "]") != 0)
                             {
                                 values[element_count] = atoi(tokens[i]);
-                                printf("values[%d]: %d\n", element_count, values[element_count]);
+                                // printf("values[%d]: %d\n", element_count, values[element_count]);
                                 element_count++;
                                 i++;
                             }

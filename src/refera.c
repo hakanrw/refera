@@ -228,8 +228,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
-			if(ary2 != NULL && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
-			if(ary3 != NULL && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
 			{
 				src2_value = atoi(PT[0].source2);
@@ -247,17 +247,33 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			}
 			else 
 			{
-				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) + src2_value;
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) + *(ary3->base);
 				else if(ary1->dim == 1)
-					for (int i = 0; i < ary1->size1; i++)
-					{
-						*(ary1->base + i) = *(ary2->base) + *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base + i);
+						}
+				}
 				else
-					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
-					{
-						*(ary1->base + i) = *(ary2->base) + *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base + i);
+						}
+				}
 			}
 			return true;
 			break;
@@ -266,8 +282,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
-			if(ary2 != NULL && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
-			if(ary3 != NULL && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
 			{
 				src2_value = atoi(PT[0].source2);
@@ -285,17 +301,33 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			}
 			else 
 			{
-				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) - src2_value;
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) - *(ary3->base);
 				else if(ary1->dim == 1)
-					for (int i = 0; i < ary1->size1; i++)
-					{
-						*(ary1->base + i) = *(ary2->base) - *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base + i);
+						}
+				}
 				else
-					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
-					{
-						*(ary1->base + i) = *(ary2->base) - *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base + i);
+						}
+				}
 			}
 			return true;
 			break;
@@ -304,8 +336,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
-			if(ary2 != NULL && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
-			if(ary3 != NULL && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
 			{
 				src2_value = atoi(PT[0].source2);
@@ -323,17 +355,33 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			}
 			else 
 			{
-				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) * src2_value;
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) * *(ary3->base);
 				else if(ary1->dim == 1)
-					for (int i = 0; i < ary1->size1; i++)
-					{
-						*(ary1->base + i) = *(ary2->base) * *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base + i);
+						}
+				}
 				else
-					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
-					{
-						*(ary1->base + i) = *(ary2->base) * *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base + i);
+						}
+				}
 			}
 			return true;
 			break;
@@ -342,8 +390,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
-			if(ary2 != NULL && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
-			if(ary3 != NULL && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
 			if(ary3 == NULL) 
 			{
 				src2_value = atoi(PT[0].source2);
@@ -361,17 +409,33 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			}
 			else 
 			{
-				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) / src2_value;
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) / *(ary3->base);
 				else if(ary1->dim == 1)
-					for (int i = 0; i < ary1->size1; i++)
-					{
-						*(ary1->base + i) = *(ary2->base) / *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base + i);
+						}
+				}
 				else
-					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
-					{
-						*(ary1->base + i) = *(ary2->base) / *(ary3->base);
-					}
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base + i);
+						}
+				}
 			}
 			return true;
 			break;
@@ -389,11 +453,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 					*(new_var.base + i) = values[i];
 				}
 			}
-			else if(dim == 1)
+			else if(dim == 2)
 			{
 				for (int i = 0; i < new_var.size1 * new_var.size2; i++)
 				{
-					*(new_var.base + i) = values[i];
+					*(new_var.base + i) = values[i + 1];
 				}
 			}	
 			refera_set_variable(state, PT[0].destination, new_var);
@@ -430,6 +494,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			if(!refera_check_if(state)) return true;
 			refera_symbol_t* dest = refera_get_variable(state, PT[0].destination);
 			refera_symbol_t* source = refera_get_variable(state, PT[0].source1);
+			if(dest == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(source->dim,source->size1,source->size2));
+				dest = refera_get_variable(state, PT[0].destination);
+			}
 			if((dest->size1 != source->size1) || (dest->size2 != source->size2))
 			{
 				set_error_message(state, "Array sizes do not match!");
@@ -450,7 +519,7 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			break;
 		case R_SUM:
 			if(!refera_check_if(state)) return true;
-			opr = refera_get_variable(state, PT[0].operand1.symbol);
+			opr = refera_get_variable(state, PT[0].source1);
 			if(opr == NULL || PT[0].destination == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
