@@ -24,10 +24,13 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <assert.h>
 
 #include "refera.h"
 #include "parser.h"
+#include "functions.h"
+#include "operations.h"
 
 static void set_error_message(refera_state_t* state, char* error_message)
 {
@@ -134,9 +137,461 @@ refera_symbol_t refera_create_variable(int dim, int size1, int size2)
 	return variable;
 }
 
+bool refera_check_if(refera_state_t* state)
+{
+	if(PT[0].ifexists == 0) return true;
+	int idx1_1, idx1_2, idx2_1, idx2_2;
+	idx1_1 = idx1_2 = idx2_1 = idx2_2 = -1;
+	refera_symbol_t* opr1 = refera_get_variable(state, PT[0].operand1.symbol);
+	refera_symbol_t* opr2 = refera_get_variable(state, PT[0].operand2.symbol);
+	int opr1_value = -1;
+	int opr2_value = -1;
+	if(opr1->dim != 0)
+	{
+		if(opr1->dim == 1)
+		{
+			idx1_1 = PT[0].operand1.idx1;
+			opr1_value = *(opr1->base + idx1_1);
+		}
+		else
+		{
+			idx1_1 = PT[0].operand1.idx1;
+			idx1_2 = PT[0].operand1.idx2;
+			int array_index = (idx1_1 * opr1->size2) + idx1_2;
+			opr1_value = *(opr1->base + array_index);
+		}
+	}
+	else opr1_value = *(opr1->base);
+	if(opr2 != NULL)
+	{
+		if(opr2->dim != 0)
+		{
+			if(opr2->dim == 1)
+			{
+				idx2_1 = PT[0].operand2.idx1;
+				opr2_value = *(opr2->base + idx2_1);
+			}
+			else
+			{
+				idx2_1 = PT[0].operand2.idx1;
+				idx2_2 = PT[0].operand2.idx2;
+				int array_index = (idx2_1 * opr2->size2) + idx2_2;
+				opr2_value = *(opr2->base + array_index);
+			}
+		}
+		else opr2_value = *(opr2->base);
+	}
+	else opr2_value = atoi(PT[0].operand2.symbol);
+	int condition = PT[0].cond;
+	switch (condition)
+	{
+		case R_EQU:
+			if(opr1_value == opr2_value) return true;
+			break;
+		case R_NEQ:
+			if(opr1_value != opr2_value) return true;
+			break;
+		case R_GRT:
+			if(opr1_value > opr2_value) return true;
+			break;
+		case R_GTE:
+			if(opr1_value >= opr2_value) return true;
+			break;
+		case R_LSR:
+			if(opr1_value < opr2_value) return true;
+			break;
+		case R_LRE:
+			if(opr1_value <= opr2_value) return true;
+			break;
+	}
+	return false;
+}
+
 bool refera_eval_string(refera_state_t* state, const char* text)
 {
 	if (strlen(text) == 0) return true;
+
+	parser_parse_statement(text);
+	if (!state->silent) parser_display_table();
+
+	int operation = PT[0].operation;
+	refera_symbol_t* opr = NULL;
+	refera_symbol_t* ary1 = NULL;
+	refera_symbol_t* ary2 = NULL;
+	refera_symbol_t* ary3 = NULL;
+	int src2_value = 0;
+
+	switch (operation)
+	{
+		case R_ADD:
+			if(!refera_check_if(state)) return true;
+			ary1 = refera_get_variable(state, PT[0].destination);
+			ary2 = refera_get_variable(state, PT[0].source1);
+			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary3 == NULL) 
+			{
+				src2_value = atoi(PT[0].source2);
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) + src2_value;
+				else if(ary1->dim == 1)
+					for (int i = 0; i < ary1->size1; i++)
+					{
+						*(ary1->base + i) = *(ary2->base) + src2_value;
+					}
+				else
+					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+					{
+						*(ary1->base + i) = *(ary2->base) + src2_value;
+					}
+			}
+			else 
+			{
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) + *(ary3->base);
+				else if(ary1->dim == 1)
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base + i);
+						}
+				}
+				else
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) + *(ary3->base + i);
+						}
+				}
+			}
+			return true;
+			break;
+		case R_SUB:
+			if(!refera_check_if(state)) return true;
+			ary1 = refera_get_variable(state, PT[0].destination);
+			ary2 = refera_get_variable(state, PT[0].source1);
+			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary3 == NULL) 
+			{
+				src2_value = atoi(PT[0].source2);
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) - src2_value;
+				else if(ary1->dim == 1)
+					for (int i = 0; i < ary1->size1; i++)
+					{
+						*(ary1->base + i) = *(ary2->base) - src2_value;
+					}
+				else
+					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+					{
+						*(ary1->base + i) = *(ary2->base) - src2_value;
+					}
+			}
+			else 
+			{
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) - *(ary3->base);
+				else if(ary1->dim == 1)
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base + i);
+						}
+				}
+				else
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) - *(ary3->base + i);
+						}
+				}
+			}
+			return true;
+			break;
+		case R_MUL:
+			if(!refera_check_if(state)) return true;
+			ary1 = refera_get_variable(state, PT[0].destination);
+			ary2 = refera_get_variable(state, PT[0].source1);
+			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary3 == NULL) 
+			{
+				src2_value = atoi(PT[0].source2);
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) * src2_value;
+				else if(ary1->dim == 1)
+					for (int i = 0; i < ary1->size1; i++)
+					{
+						*(ary1->base + i) = *(ary2->base) * src2_value;
+					}
+				else
+					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+					{
+						*(ary1->base + i) = *(ary2->base) * src2_value;
+					}
+			}
+			else 
+			{
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) * *(ary3->base);
+				else if(ary1->dim == 1)
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base + i);
+						}
+				}
+				else
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) * *(ary3->base + i);
+						}
+				}
+			}
+			return true;
+			break;
+		case R_DIV:
+			if(!refera_check_if(state)) return true;
+			ary1 = refera_get_variable(state, PT[0].destination);
+			ary2 = refera_get_variable(state, PT[0].source1);
+			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary1 == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
+				ary1 = refera_get_variable(state, PT[0].destination);
+			}
+			if(ary2 != NULL && ary2->dim != 0 && (ary2->size1 != ary1->size1 || ary2->size2 != ary1->size2)) return false;
+			if(ary3 != NULL && ary3->dim != 0 && (ary3->size1 != ary1->size1 || ary3->size2 != ary1->size2)) return false;
+			if(ary3 == NULL) 
+			{
+				src2_value = atoi(PT[0].source2);
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) / src2_value;
+				else if(ary1->dim == 1)
+					for (int i = 0; i < ary1->size1; i++)
+					{
+						*(ary1->base + i) = *(ary2->base) / src2_value;
+					}
+				else
+					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+					{
+						*(ary1->base + i) = *(ary2->base) / src2_value;
+					}
+			}
+			else 
+			{
+				if(ary1->dim == 0) *(ary1->base) = *(ary2->base) / *(ary3->base);
+				else if(ary1->dim == 1)
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base);
+						}
+					else
+						for (int i = 0; i < ary1->size1; i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base + i);
+						}
+				}
+				else
+				{
+					if(ary3->dim == 0)
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base);
+						}
+					else
+						for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
+						{
+							*(ary1->base + i) = *(ary2->base + i) / *(ary3->base + i);
+						}
+				}
+			}
+			return true;
+			break;
+		case R_INI:
+			if(!refera_check_if(state)) return true;
+			int dim;
+			if(PT[0].source1[0] == '\0') dim = 0;
+			else if(PT[0].source2[0] == '\0') dim = 1;
+			else dim = 2;
+			refera_symbol_t new_var = refera_create_variable(dim, atoi(PT[0].source1), atoi(PT[0].source2));
+			if(dim == 1)
+			{
+				for (int i = 0; i < new_var.size1; i++)
+				{
+					*(new_var.base + i) = values[i];
+				}
+			}
+			else if(dim == 2)
+			{
+				for (int i = 0; i < new_var.size1 * new_var.size2; i++)
+				{
+					*(new_var.base + i) = values[i + 1];
+				}
+			}	
+			refera_set_variable(state, PT[0].destination, new_var);
+			return true;
+			break;
+		case R_SET:
+			if(!refera_check_if(state)) return true;
+			refera_symbol_t* variable = refera_get_variable(state, PT[0].destination);
+			if (variable == NULL)
+			{
+				refera_symbol_t new_variable = refera_create_variable(0, 0, 0);
+				refera_set_variable(state, PT[0].destination, new_variable);
+				variable = refera_get_variable(state, PT[0].destination);
+			}
+			if (variable && variable->base)
+			{
+				if(variable->dim == 0)  *variable->base = atoi(PT[0].source1);
+				else if(variable->dim == 1)
+					for (int i = 0; i < variable->size1; i++)
+					{
+						*(variable->base + i) = atoi(PT[0].source1);
+					}
+				else if(variable->dim == 2)
+					for (int i = 0; i < (variable->size1 * variable->size2); i++)
+					{
+						*(variable->base + i) = atoi(PT[0].source1);
+					}
+					
+					
+			}
+			return true;
+			break;
+		case R_CPY:
+			if(!refera_check_if(state)) return true;
+			refera_symbol_t* dest = refera_get_variable(state, PT[0].destination);
+			refera_symbol_t* source = refera_get_variable(state, PT[0].source1);
+			if(dest == NULL)
+			{
+				refera_set_variable(state, PT[0].destination,refera_create_variable(source->dim,source->size1,source->size2));
+				dest = refera_get_variable(state, PT[0].destination);
+			}
+			if((dest->size1 != source->size1) || (dest->size2 != source->size2))
+			{
+				set_error_message(state, "Array sizes do not match!");
+				return false;
+			}
+			if(dest->dim == 0) *dest->base = *source->base;
+			else if(dest-> dim == 1)
+				for (int i = 0; i < dest->size1; i++)
+				{
+					*(dest->base + i) = *(source->base + i);
+				}
+			else if(dest->dim == 2)
+				for (int i = 0; i < (dest->size1 * dest->size2); i++)
+				{
+					*(dest->base + i) = *(source->base + i);
+				}
+			return true;
+			break;
+		case R_SUM:
+			if(!refera_check_if(state)) return true;
+			opr = refera_get_variable(state, PT[0].source1);
+			if(opr == NULL)
+			{
+				set_error_message(state, "Can't find operand or destination");
+				return false;
+			}
+			refera_set_variable(state, PT[0].destination, refera_sum(*opr));
+			return true;
+			break;
+		case R_AVG:
+			if(!refera_check_if(state)) return true;
+			opr = refera_get_variable(state, PT[0].source1);
+			if(opr == NULL)
+			{
+				set_error_message(state, "Can't find operand or destination");
+				return false;
+			}
+			refera_set_variable(state, PT[0].destination, refera_aver(*opr));
+			return true;
+			break;
+		case R_DIA:
+			if(!refera_check_if(state)) return true;
+			opr = refera_get_variable(state, PT[0].source1);
+			if(opr == NULL)
+			{
+				set_error_message(state, "Can't find operand or destination");
+				return false;
+			}
+			refera_set_variable(state, PT[0].destination, refera_diag(*opr));
+			return true;
+			break;
+		case R_EXC:
+			if(!refera_check_if(state)) return true;
+			ary1 = refera_get_variable(state, PT[0].operand1.symbol);
+			ary2 = refera_get_variable(state, PT[0].operand2.symbol);
+			int temp_element = *(ary1->base + ((PT[0].operand1.idx2 * ary1->size2) + PT[0].operand1.idx1));
+			*(ary1->base + ((PT[0].operand1.idx2 * ary1->size2) + PT[0].operand1.idx1)) = 
+			*(ary2->base + ((PT[0].operand2.idx2 * ary1->size2) + PT[0].operand2.idx1));
+			*(ary2->base + ((PT[0].operand2.idx2 * ary1->size2) + PT[0].operand2.idx1)) = temp_element;
+			return true;
+			break;
+		case R_PRI:
+			if(!refera_check_if(state)) return true;
+			refera_symbol_t* var = refera_get_variable(state, PT[0].source1);
+			if(var == NULL)
+			{
+				set_error_message(state, "Can't find operand");
+				return false;
+			}
+			refera_print(*var);
+			return true;
+			break;
+	}
 
 	set_error_message(state, "Unimplemented statement");
 
@@ -177,5 +632,17 @@ bool refera_eval_file(refera_state_t* state, const char* filename)
 	}
 
 	state->error_message = NULL;
+	return true;
+}
+
+bool refera_is_number(const char* str)
+{
+	size_t string_len = strlen(str);
+	for (size_t i = 0; i < string_len; i++)
+	{
+		bool digit = isdigit(str[i]);
+		if (!digit) return false;
+	}
+
 	return true;
 }

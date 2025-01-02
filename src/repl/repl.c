@@ -26,9 +26,6 @@
 #include "ps2.h"
 #include "refera.h"
 
-#define printf	ps2_printf
-#define fgets	ps2_fgets
-
 void repl_loop(refera_state_t* state)
 {
 	while (true)
@@ -64,8 +61,9 @@ void eval_file(refera_state_t* state, const char* filename)
 
 void print_usage()
 {
-    printf("USAGE: refera [--help] [file_name]\n");
+    printf("USAGE: refera [--help] [--silent] [file_name]\n");
     printf("  --help          Display this help message\n");
+    printf("  --silent        Silent output\n");
     printf("  file_name       Evaluate the file\n");
 }
 
@@ -84,7 +82,26 @@ int main(int argc, char** argv)
 	else if (argc == 2)
 	{
 		if (strcmp(argv[1], "--help") == 0) print_usage();
+		else if (strcmp(argv[1], "--silent") == 0)
+		{
+			state.silent = true;
+			repl_loop(&state);
+		}
 		else eval_file(&state, argv[1]);
+	}
+	else if (argc == 3)
+	{
+		if (strcmp(argv[1], "--silent") == 0)
+		{
+			state.silent = true;
+			eval_file(&state, argv[2]);
+		}
+		else if (strcmp(argv[2], "--silent") == 0)
+		{
+			state.silent = true;
+			eval_file(&state, argv[1]);
+		}
+		else print_usage();
 	}
 	else // Invalid number of arguments
 	{

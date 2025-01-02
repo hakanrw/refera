@@ -38,5 +38,16 @@ struct ParseTable {
 };
 
 extern struct ParseTable PT[1];
+extern int values[256];
+
+void parser_reset_table();
+
+void parser_display_table();
+
+void tokenize(const char *statement, char tokens[50][10], int *token_count);
+
+int check_operations(const char* token);
+
+int check_cond(const char* token);
 
 void parser_parse_statement(const char* statement);

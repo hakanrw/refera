@@ -98,16 +98,6 @@ void test_refera_eval_string()
 	refera_state_destroy(&test_state);
 }
 
-void test_refera_eval_file()
-{
-	refera_state_t test_state;
-	refera_state_init(&test_state);
-
-	CU_ASSERT(false); // TODO: Baris Getiren
-
-	refera_state_destroy(&test_state);
-}
-
 void test_refera_copy_variable()
 {
 	refera_symbol_t simple = refera_create_variable(0, 0, 0);
@@ -194,9 +184,6 @@ int test_refera_register(CU_pSuite* suite)
 		return CU_get_error();
 
 	if (CU_add_test(*suite, "state_destroy()", test_refera_state_destroy) == NULL)
-		return CU_get_error();
-
-	if (CU_add_test(*suite, "eval_file()", test_refera_eval_file) == NULL)
 		return CU_get_error();
 
 	if (CU_add_test(*suite, "eval_string()", test_refera_eval_string) == NULL)

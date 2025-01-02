@@ -1,4 +1,4 @@
-2024-12-21  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+2024-01-02  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
 
 	Port for Sony Playstation 2
 	* Makefile: Modify for PS2SDK.
@@ -12,6 +12,39 @@
 	* ps2drv/mcman.irx: Likewise.
 	* ps2drv/ps2kbd.irx: Likewise.
 	* ps2drv/usbd.irx: Likewise.
+
+2025-01-01  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+	Implement unit tests for functions.c
+	* test/test_functions.c (test_functions_sum): Implement function.
+	(test_functions_aver): Likewise.
+	(test_functions_diag): Likewise.
+	(test_functions_print): Likewise.
+
+2024-12-23  Barış Getiren  <baris.getiren@std.yeditepe.edu.tr>
+
+	Implement unit tests for parser.c
+	* test/test_parser.c (parser_test_sum): Implement function.
+	(parser_test_set): Likewise.
+	(parser_test_copy): Likewise.
+	(parser_test_aver): Likewise.
+	(parser_test_diag): Likewise.
+	(parser_test_if): Likewise.
+	(parser_test_add): Likewise.
+	(parser_test_sub): Likewise.
+	(parser_test_exchange): Likewise.
+	(parser_test_print): Likewise.
+
+2024-12-23  Berk Tahir Kılıç  <berktahir.kilic@std.yeditepe.edu.tr>
+
+	Implement the parser
+	* src/parser.c (parser_reset_table): Implement function.
+	(parser_parse_statement): Likewise.
+	(parser_display_table): Likewise.
+	(tokenize): Likewise.
+	(check_operations): Likewise.
+	(check_cond): Likewise.
+>>>>>>> main
 
 2024-12-20  Barış Getiren  <baris.getiren@std.yeditepe.edu.tr>
 

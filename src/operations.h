@@ -55,4 +55,16 @@ typedef unsigned char refera_operation_t; // Operation type 0..255
 /* print */
 #define R_PRI	12
 
+#define R_EQU 1
+
+#define R_NEQ 2
+
+#define R_GRT 3
+
+#define R_GTE 4
+
+#define R_LSR 5
+
+#define R_LRE 6
+
 #endif /* OPERATIONS_H */

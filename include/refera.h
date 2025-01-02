@@ -27,6 +27,11 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+void ps2_printf(const char* format, ...);
+char* ps2_fgets(char* str, int n, FILE* stream);
+#define printf  ps2_printf
+#define fgets  ps2_fgets
+
 /* Refera structures */
 
 typedef struct SymbolTable
@@ -44,6 +49,7 @@ typedef struct
 	refera_symbol_t variables[20];            // Array of global variables
 	size_t variables_idx;
 	char* error_message;        // Error message if exists
+	bool silent;
 }
 refera_state_t;
 
@@ -69,8 +75,14 @@ refera_symbol_t refera_create_variable(int dim, int size1, int size2);
 
 /* Interpretarion */
 
+bool refera_check_if(refera_state_t* state);
+
 bool refera_eval_string(refera_state_t* state, const char* text);
 
 bool refera_eval_file(refera_state_t* state, const char* filename);
+
+/* Helper Functions */
+
+bool refera_is_number(const char* str);
 
 #endif /* REFERA_H */
