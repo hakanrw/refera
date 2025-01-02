@@ -303,21 +303,46 @@ void parser_parse_statement(const char* statement)
         }
         else if (strcmp(tokens[i], "=") == 0)
         {
+            bool is2d = false;
             if (strcmp(tokens[i+1],"[") == 0) {
+                if (strcmp(tokens[i+2],"[") == 0) {
+                    printf("2d array\n");
+                    is2d = true;
+                }
                 if (PT[0].operation == 0) {
                     PT[0].operation = 5;
-
                 }
                 else {
                     break;
                 }
                 int element_count = 0;
-                while (strcmp(tokens[i], "]") != 0)
-                {
-                    values[element_count] = atoi(tokens[i+2]);
-                    element_count++;
-                    i++;
+                if (!is2d) {
+                    while (strcmp(tokens[i], "]") != 0)
+                    {
+                        values[element_count] = atoi(tokens[i+2]);
+                        element_count++;
+                        i++;
+                    }
                 }
+                else if (is2d) {
+                    i++;
+                    while (strcmp(tokens[i], "]") != 0)
+                    {
+                        if (strcmp(tokens[i], "[") == 0)
+                        {
+                            i++;
+                            while (strcmp(tokens[i], "]") != 0)
+                            {
+                                values[element_count] = atoi(tokens[i]);
+                                printf("values[%d]: %d\n", element_count, values[element_count]);
+                                element_count++;
+                                i++;
+                            }
+                        }
+                        i++;
+                    }
+                }
+
                 break;
             }
             else if ((strcmp(tokens[i+1],"[") != 0)) {
