@@ -520,7 +520,7 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 		case R_SUM:
 			if(!refera_check_if(state)) return true;
 			opr = refera_get_variable(state, PT[0].source1);
-			if(opr == NULL || PT[0].destination == NULL)
+			if(opr == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
 				return false;
@@ -530,8 +530,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			break;
 		case R_AVG:
 			if(!refera_check_if(state)) return true;
-			opr = refera_get_variable(state, PT[0].operand1.symbol);
-			if(opr == NULL || PT[0].destination == NULL)
+			opr = refera_get_variable(state, PT[0].source1);
+			if(opr == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
 				return false;
@@ -541,8 +541,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			break;
 		case R_DIA:
 			if(!refera_check_if(state)) return true;
-			opr = refera_get_variable(state, PT[0].operand1.symbol);
-			if(opr == NULL || PT[0].destination == NULL)
+			opr = refera_get_variable(state, PT[0].source1);
+			if(opr == NULL)
 			{
 				set_error_message(state, "Can't find operand or destination");
 				return false;
