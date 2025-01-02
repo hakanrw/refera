@@ -212,8 +212,8 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 	if (strlen(text) == 0) return true;
 
 	parser_parse_statement(text);
-	parser_display_table();
-	
+	if (!state->silent) parser_display_table();
+
 	int operation = PT[0].operation;
 	refera_symbol_t* opr = NULL;
 	refera_symbol_t* ary1 = NULL;

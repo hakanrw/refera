@@ -44,6 +44,7 @@ typedef struct
 	refera_symbol_t variables[20];            // Array of global variables
 	size_t variables_idx;
 	char* error_message;        // Error message if exists
+	bool silent;
 }
 refera_state_t;
 
