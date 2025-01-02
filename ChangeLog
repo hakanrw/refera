@@ -1,3 +1,11 @@
+2025-01-01  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+
+	Implement unit tests for functions.c
+	* test/test_functions.c (test_functions_sum): Implement function.
+	(test_functions_aver): Likewise.
+	(test_functions_diag): Likewise.
+	(test_functions_print): Likewise.
+
 2024-12-23  Barış Getiren  <baris.getiren@std.yeditepe.edu.tr>
 
 	Implement unit tests for parser.c
