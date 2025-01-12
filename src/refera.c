@@ -505,8 +505,6 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 					{
 						*(variable->base + i) = atoi(PT[0].source1);
 					}
-					
-					
 			}
 			return true;
 			break;
