@@ -228,6 +228,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary2 == NULL || (ary3 == NULL && atoi(PT[0].source2) == 0 && PT[0].source2[0] != '0'))
+			{
+				set_error_message(state, "Can't find variable or array!");
+				return false;
+			}
 			if(ary1 == NULL)
 			{
 				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
@@ -287,6 +292,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary2 == NULL || (ary3 == NULL && atoi(PT[0].source2) == 0 && PT[0].source2[0] != '0'))
+			{
+				set_error_message(state, "Can't find variable or array!");
+				return false;
+			}
 			if(ary1 == NULL)
 			{
 				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
@@ -346,6 +356,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
 			ary3 = refera_get_variable(state, PT[0].source2);
+			if(ary2 == NULL || (ary3 == NULL && atoi(PT[0].source2) == 0 && PT[0].source2[0] != '0'))
+			{
+				set_error_message(state, "Can't find variable or array!");
+				return false;
+			}
 			if(ary1 == NULL)
 			{
 				refera_set_variable(state, PT[0].destination,refera_create_variable(ary2->dim,ary2->size1,ary2->size2));
@@ -401,6 +416,11 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			return true;
 			break;
 		case R_DIV:
+			if(ary2 == NULL || (ary3 == NULL && atoi(PT[0].source2) == 0 && PT[0].source2[0] != '0'))
+			{
+				set_error_message(state, "Can't find variable or array!");
+				return false;
+			}
 			if(!refera_check_if(state)) return true;
 			ary1 = refera_get_variable(state, PT[0].destination);
 			ary2 = refera_get_variable(state, PT[0].source1);
