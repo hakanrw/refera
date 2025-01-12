@@ -1,4 +1,10 @@
-2025-01-01  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
+2024-12-29  Egemen Aybir <egemen.aybir@std.yeditep.edu.tr>
+
+	Finalize interpreter
+	* src/refera.c (refera_eval_string): Implement all cases.
+	(refera_is_number): Implement function.
+
+2024-12-29  Ahmet Hakan Candar  <ahmethakan.candar@std.yeditepe.edu.tr>
 
 	Implement unit tests for functions.c
 	* test/test_functions.c (test_functions_sum): Implement function.
