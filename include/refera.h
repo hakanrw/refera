@@ -48,8 +48,6 @@ typedef struct
 }
 refera_state_t;
 
-typedef void (*refera_delegate_t)(refera_state_t* state, refera_symbol_t argument);
-
 /* State initalization */
 
 void refera_state_init(refera_state_t* state);
