@@ -84,6 +84,7 @@ void test_refera_eval_string()
 {
 	refera_state_t test_state;
 	refera_state_init(&test_state);
+	test_state.silent = true;
 
 	refera_eval_string(&test_state, "var1 = 5");
 
