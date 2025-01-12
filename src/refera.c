@@ -512,6 +512,13 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			if(!refera_check_if(state)) return true;
 			refera_symbol_t* dest = refera_get_variable(state, PT[0].destination);
 			refera_symbol_t* source = refera_get_variable(state, PT[0].source1);
+			if(source == NULL)
+			{
+				char error_message[256];
+				snprintf(error_message, 256, "Symbol %s undefined", PT[0].source1);
+				set_error_message(state, error_message);
+				return false;
+			}
 			if(dest == NULL)
 			{
 				refera_set_variable(state, PT[0].destination,refera_create_variable(source->dim,source->size1,source->size2));
