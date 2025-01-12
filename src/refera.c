@@ -242,12 +242,12 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 				else if(ary1->dim == 1)
 					for (int i = 0; i < ary1->size1; i++)
 					{
-						*(ary1->base + i) = *(ary2->base) + src2_value;
+						*(ary1->base + i) = *(ary2->base + i) + src2_value;
 					}
 				else
 					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
 					{
-						*(ary1->base + i) = *(ary2->base) + src2_value;
+						*(ary1->base + i) = *(ary2->base + i) + src2_value;
 					}
 			}
 			else 
@@ -301,12 +301,12 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 				else if(ary1->dim == 1)
 					for (int i = 0; i < ary1->size1; i++)
 					{
-						*(ary1->base + i) = *(ary2->base) - src2_value;
+						*(ary1->base + i) = *(ary2->base + i) - src2_value;
 					}
 				else
 					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
 					{
-						*(ary1->base + i) = *(ary2->base) - src2_value;
+						*(ary1->base + i) = *(ary2->base + i) - src2_value;
 					}
 			}
 			else 
@@ -360,12 +360,12 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 				else if(ary1->dim == 1)
 					for (int i = 0; i < ary1->size1; i++)
 					{
-						*(ary1->base + i) = *(ary2->base) * src2_value;
+						*(ary1->base + i) = *(ary2->base + i) * src2_value;
 					}
 				else
 					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
 					{
-						*(ary1->base + i) = *(ary2->base) * src2_value;
+						*(ary1->base + i) = *(ary2->base + i) * src2_value;
 					}
 			}
 			else 
@@ -419,12 +419,12 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 				else if(ary1->dim == 1)
 					for (int i = 0; i < ary1->size1; i++)
 					{
-						*(ary1->base + i) = *(ary2->base) / src2_value;
+						*(ary1->base + i) = *(ary2->base + i) / src2_value;
 					}
 				else
 					for (int i = 0; i < (ary1->size1 * ary1->size2); i++)
 					{
-						*(ary1->base + i) = *(ary2->base) / src2_value;
+						*(ary1->base + i) = *(ary2->base + i) / src2_value;
 					}
 			}
 			else 
@@ -602,7 +602,7 @@ bool refera_eval_string(refera_state_t* state, const char* text)
 			break;
 	}
 
-	set_error_message(state, "Unimplemented statement");
+	set_error_message(state, "Error!");
 
 	return false;
 }
